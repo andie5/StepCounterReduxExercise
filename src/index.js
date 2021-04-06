@@ -1,17 +1,40 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import StepCounter from "./StepCounter";
+export const ADD_STEP = "ADD_STEP";
+export const RESET_STEPS = "RESET_STEPS";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+const initialState = {
+  steps: 0,
+};
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case ADD_STEP:
+      return { steps: state.steps + 1 };
+    case RESET_STEPS:
+      return { steps: 0 };
+    default:
+      return state;
+  }
+}
+
+export function addStep() {
+  return { type: ADD_STEP };
+}
+
+export function resetSteps() {
+  return { type: RESET_STEPS };
+}
+
+const store = createStore(reducer);
+
+const App = () => (
+  <Provider store={store}>
+    <StepCounter />
+  </Provider>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+ReactDOM.render(<App />, document.getElementById("root"));
